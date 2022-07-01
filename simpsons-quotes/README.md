@@ -2,25 +2,30 @@
 
 ![homer-console](images/homer-simpson.gif)
 
+## Enunciado
+
 Se tiene una API hecha en Python con FastApi+SQLAlchemy y su correspondiente Base de datos en MySQL.
 
 Al momento la misma se encuentra dockerizada y se puede ejecutar localmente (Ver ejemplo).
 
-## El objetivo es levantar un cluster de Kubernetes donde alojar ambos servicios, se busca:
+Para permitir la alta disponibilidad de la aplicación, se deberá levantar un cluster de **Kubernetes**
+### Objetivos:
 
 * Buildear la imagen de la API y subirla a la registry de docker que utilice el cluster.
-* Generar los correspondientes Deployments para las aplicaciones y verificar que están visibles entre sí utilizando un Service.
+* Generar los correspondientes Deployments para las aplicaciones y verificar que están visibles entre sí utilizando el objeto Service.
 * Generar un Volumen persistente para la Base de datos.
-* Generar los Secrets de K8S para evitar acceder a la contraseña de la base por texto plano.
+* Generar un Secrets de K8S para evitar acceder a la contraseña de la base por texto plano.
 * Generar el Ingress para que la API sea accesible y pueda consultarse mediante curl, o desde un navegador.
 
 ### Opcional:
 
-* Armar un README explicando como realizar el alta de cada elemento.
+* Armar un README explicando como realizar el alta de cada recurso de K8S y como acceder a la API.
 
-## Para la resolución se recomienda utilizar Minikube, pero puede utilizar cualquier servicio Kubernetes que crea indicado
+**Para la resolución se recomienda utilizar [Minikube](https://minikube.sigs.k8s.io/docs/start/), pero se puede utilizar cualquier servicio Kubernetes que tengas de preferencia.**
+
 ---
-### Ejemplo: Como ejecutar utilizando solo Docker
+
+### *Ejemplo: Como ejecutar localmente utilizando solo Docker*
 
 * Levantar la Base de Datos:
 
