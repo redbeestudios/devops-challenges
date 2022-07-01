@@ -1,0 +1,12 @@
+# RUN FIRST: 
+# kubectl patch configmap tcp-services -n ingress-nginx --patch '{"data":{"8000":"default/simpsons-quotes-api:8000"}}'
+# THEN APPLY: 
+# kubectl patch deployment ingress-nginx-controller --patch "$(cat ingress-nginx-controller-patch.yaml)" -n ingress-nginx
+spec:
+  template:
+    spec:
+      containers:
+      - name: controller
+        ports:
+         - containerPort: 8000
+           hostPort: 8000

@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simpsons-quotes-mysql
+  labels:
+    app: simpsons-quotes
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: simpsons-quotes
+    tier: mysql
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: simpsons-quotes
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpsons-quotes-mysql
+  labels:
+    app: simpsons-quotes
+spec:
+  selector:
+    matchLabels:
+      app: simpsons-quotes
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: simpsons-quotes
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:8.0.29
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
